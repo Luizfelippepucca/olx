@@ -4,10 +4,10 @@ import About from './pages/about';
 
 
 const RoutesApp = ()=>{
-   return( <Routes>
-            <Route path='/' element={<Home/>}/> 
-            <Route path='/about'element={ <About/>}/>
-    </Routes>
+   return ( <Routes>
+               <Route path='/' element={<Home/>}/> 
+               <Route path='/about'element={ <About/>}/>
+            </Routes>
    )
 }
 
