@@ -1,10 +1,12 @@
 
 import { Link} from 'react-router-dom';
-import IsLogged, { isLogged } from '../../../helpers/authHandler';
+import { isLogged } from '../../../helpers/authHandler';
 import { HeaderArea, Container, LogoArea ,LogoLetter1, LogoLetter2, LogoLetter3,NavMenu,ButtonMenu} from './styles';
+//import { useSelector } from 'react-redux';
 
 
 const Header = () =>{
+   // const mail = useSelector((state)=>state.user.email);
     const logged = isLogged();
     return (
         <HeaderArea>
@@ -16,6 +18,7 @@ const Header = () =>{
                        <LogoLetter3>X</LogoLetter3>
                    </Link>
                 </LogoArea>
+                {/* <div>{mail}</div> */}
                 <NavMenu>
                     <ul>
                         {!logged &&

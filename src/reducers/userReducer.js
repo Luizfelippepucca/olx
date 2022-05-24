@@ -1,15 +1,19 @@
-const initialState = {
-    name:'Luiz Pucca',
-    email:'lu1z_21@hotmail.com'
-};
+ import { createSlice} from '@reduxjs/toolkit';
 
- const userReducer = (state = initialState, action)=>{
 
-    if(action.type === 'SET_MAIL'){
-        return {...state, email:action.payload.email };
-    }
+ export const slice = createSlice({
+     name:'user',
+     initialState: {
+        name:'Luiz Pucca',
+        email:''
+     },
+     reducers:{
+         setEmail:(state,action)=>{
+                 state.email = action.payload;
+         },
+     },
+ });
 
-    return state;
-}
-
-export default userReducer;
+ export const { setEmail } = slice.actions
+    
+export default slice.reducer;

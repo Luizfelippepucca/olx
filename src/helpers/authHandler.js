@@ -5,3 +5,12 @@ export const isLogged =()=>{
 
     return (token) ? true: false;
 }
+
+export const doLoggin = (token,remmeberPassaword)=>{
+    if(remmeberPassaword){
+        Cookies.set('token',token,{expires:999});
+    }else{
+        Cookies.set('token',token);
+    }
+  
+}
