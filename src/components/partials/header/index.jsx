@@ -1,9 +1,22 @@
 
 import { Link} from 'react-router-dom';
-import { isLogged } from '../../../helpers/authHandler';
-import { HeaderArea, Container, LogoArea ,LogoLetter1, LogoLetter2, LogoLetter3,NavMenu,ButtonMenu} from './styles';
+import { isLogged,doLogOut } from '../../../helpers/authHandler';
+import { 
+    HeaderArea, 
+    Container, 
+    LogoArea 
+    ,LogoLetter1, 
+    LogoLetter2, 
+    LogoLetter3,
+    NavMenu,
+    ButtonMenu,
+    ButtonLoggout} from './styles';
 //import { useSelector } from 'react-redux';
 
+const handleLogOut = ()=>{
+    doLogOut();
+    window.location.href="/";
+}
 
 const Header = () =>{
    // const mail = useSelector((state)=>state.user.email);
@@ -30,7 +43,7 @@ const Header = () =>{
                        {logged && 
                        <>
                         <li><Link to="/my-account">Minha conta</Link></li>
-                        <li><Link to="/logout">Sair</Link></li>
+                        <li><ButtonLoggout  onClick={handleLogOut} className="logout">Sair</ButtonLoggout></li>
                         <li><ButtonMenu>Poste um anúncio</ButtonMenu></li>
                        </>
                        } 

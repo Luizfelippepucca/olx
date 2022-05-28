@@ -14,3 +14,11 @@ export const doLoggin = (token,remmeberPassaword)=>{
     }
   
 }
+
+
+export const doLogOut = ()=>{
+    let token = Cookies.get('token');
+    if(token){
+       Cookies.remove('token');
+    }
+}

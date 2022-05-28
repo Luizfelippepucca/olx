@@ -56,11 +56,12 @@ margin-right:10px ;
     li{
         margin: 0px 20px;
 
-        a{
+        a,.logout{
             color:#000;
             font-size: 14px;
             &:hover{color:#999}
         }
+        
     }
  }
 `;
@@ -80,3 +81,10 @@ cursor: pointer;
     transition: 0.3s ease-in ;
 }
 `;
+
+export const ButtonLoggout = styled.div`
+ background-color: transparent ;
+ border: none ;
+ outline: none;
+ cursor: pointer;
+` 

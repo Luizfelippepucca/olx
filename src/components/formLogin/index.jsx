@@ -1,63 +1,110 @@
-import { useState} from 'react';
+import { useState,useId} from 'react';
 import {Form} from './styles';
 import { useDispatch} from 'react-redux';
 import { setEmail } from '../../reducers/userReducer';
-import  useOlxApi  from '../../helpers/olxApi';
+
 import {doLoggin} from '../../helpers/authHandler';
 import { useCallback } from 'react';
+import { ErrorMessage } from '../template/mainComponents';
 
 const FormLogin = ()=>{
     const [emailLogin,setEmailLogin] = useState('');
     const [password,setPassword] = useState('');
-    const [remmemberPass,setRememberPassa] = useState('');
+    const [remmemberPass,setRememberPass] = useState(false);
     const [disable,setDisable] = useState(false);
     const [error,setError] = useState('');
-    const api = useOlxApi();
+    const id = useId();
+ 
     const dispatch = useDispatch();
     
-    const handleWriteEmail = useCallback((e) =>{
+    
+    const handleEmail = useCallback((e) =>{
     setEmailLogin(e.target.value);
-    },[emailLogin]);
+    },[]);
+
+    const handlePassword = useCallback((e)=>{
+        setPassword(e.target.value)
+    },[]);
+    const handleRemmemberPassword = useCallback(()=>{
+        setRememberPass(!remmemberPass);
+       
+    },[remmemberPass]);
+  
+   
+  
 
     const handleSubmit = async (e) =>{ 
+       
         e.preventDefault();
-        //setDisable(true);
+        setDisable(true);
         dispatch(setEmail(emailLogin));
-       const json = await api(emailLogin,password);
-       if(json.error){
-           setError(json.error);
-           return;
-       }
-        doLoggin(json.token,remmemberPass);
+       
+      if(emailLogin === '' || emailLogin.length < 5){
+          setError('Preencha o campo email');
+          setDisable(false);
+          return
+      }
+
+      if(password === '' || password.length < 5){
+          setError('Preencha a senha');
+          setDisable(false);
+          return;
+      }
+
+        doLoggin(id,remmemberPass);
         window.location.href="/";
     
     };
 
+
+
     return(
-        <Form onSubmit={handleSubmit}>
+        <>
+        {error && 
+            <ErrorMessage>{error}</ErrorMessage>
+            }
+        <Form  onSubmit={handleSubmit}>
+          
             <label className='area'>
                  <div className='area-title'>E-mail</div>
                  <div className='area-input'>
-                    <input type="email" disabled={disable} 
-                    placeholder="digite seu e-mail" value={emailLogin} 
-                    onChange={handleWriteEmail}/>
+                    <input 
+                    type="email" 
+                    disabled={disable} 
+                    placeholder="digite seu e-mail" 
+                    value={emailLogin} 
+                    onChange={handleEmail}/>
                  </div>
             </label>
             <label className='area'>
                <div className='area-title'>Senha</div>
                 <div className='area-input'>
-                    <input type="password" disabled={disable} 
-                    placeholder="digite sua senha"/>
+                    <input 
+                    type="password" 
+                    disabled={disable} 
+                    placeholder="digite sua senha"
+                    value={password}
+                    onChange={handlePassword}
+                    />
+                  
                 </div>
             </label>
              <label className='area'>
                 <div className='area-title'>Lembrar senha</div>
-                <input type="checkbox" placeholder="digite sua senha" disabled={disable} className='checkbox'/>
+                <input 
+                type="checkbox" 
+                placeholder="digite sua senha" 
+                disabled={disable} 
+                onChange={handleRemmemberPassword}
+                checked={remmemberPass}
+                className='checkbox'/>
+               
             </label>
             <label className='area'>
-                <button>Fazer Login</button>
+                <button >Fazer Login</button>
             </label>
        </Form>
+       </>
     )
 }
 
