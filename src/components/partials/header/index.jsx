@@ -11,7 +11,7 @@ import {
     NavMenu,
     ButtonMenu,
     ButtonLoggout} from './styles';
-//import { useSelector } from 'react-redux';
+
 
 const handleLogOut = ()=>{
     doLogOut();
@@ -19,7 +19,7 @@ const handleLogOut = ()=>{
 }
 
 const Header = () =>{
-   // const mail = useSelector((state)=>state.user.email);
+ 
     const logged = isLogged();
     return (
         <HeaderArea>
@@ -31,7 +31,7 @@ const Header = () =>{
                        <LogoLetter3>X</LogoLetter3>
                    </Link>
                 </LogoArea>
-                {/* <div>{mail}</div> */}
+               
                 <NavMenu>
                     <ul>
                         {!logged &&
@@ -42,6 +42,7 @@ const Header = () =>{
                         }
                        {logged && 
                        <>
+                       
                         <li><Link to="/my-account">Minha conta</Link></li>
                         <li><ButtonLoggout  onClick={handleLogOut} className="logout">Sair</ButtonLoggout></li>
                         <li><ButtonMenu>Poste um anúncio</ButtonMenu></li>

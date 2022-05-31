@@ -1,8 +1,6 @@
 import { useState,useId, useEffect} from 'react';
 import { useLocation,useNavigate } from 'react-router-dom';
 import {Form} from './styles';
-import { useDispatch} from 'react-redux';
-import { setEmail } from '../../reducers/userReducer';
 import {doLoggin} from '../../helpers/authHandler';
 import { useCallback } from 'react';
 import { ErrorMessage,SuccesMessage } from '../template/mainComponents';
@@ -20,7 +18,6 @@ const FormLogin = ()=>{
     const [stateList,setStateList] = useState([]);
     const id = useId();
     const route  = useLocation();
-    const dispatch = useDispatch();
     const [succesResgistration,setSuccesResgistration] = useState('');
     const navigation = useNavigate();
    
@@ -62,7 +59,6 @@ const FormLogin = ()=>{
        
         e.preventDefault();
         setDisable(true);
-        dispatch(setEmail(emailLogin));
         let userString = localStorage.getItem('user');
         let userSaved= JSON.parse(userString);
         
@@ -91,13 +87,14 @@ const FormLogin = ()=>{
        }
 
         doLoggin(id,remmemberPass);
-        window.location.href="/";
+        window.location.href="/"
     
-    },[dispatch,emailLogin,id,password,remmemberPass]);
+    },[emailLogin,id,password,remmemberPass]);
 
     const handleRegistration = useCallback((e)=>{
         e.preventDefault();
         setDisable(true);
+        
         if(name ==="" | name.length <5){
              setError('Preencha o nome completo');
              setDisable(false);
