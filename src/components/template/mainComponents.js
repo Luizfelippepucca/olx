@@ -22,4 +22,11 @@ color:#000 ;
 border: 2px solid #FF0000 ;
 padding: 10px ;
 `
+export const SuccesMessage = styled.div`
+margin: 10px ;
+background-color:#33FF99 ;
+color:#000 ;
+border: 1px solid #00FF00 ;
+padding: 10px ;
+`
 

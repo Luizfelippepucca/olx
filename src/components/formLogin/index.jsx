@@ -1,11 +1,11 @@
 import { useState,useId, useEffect} from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation,useNavigate } from 'react-router-dom';
 import {Form} from './styles';
 import { useDispatch} from 'react-redux';
 import { setEmail } from '../../reducers/userReducer';
 import {doLoggin} from '../../helpers/authHandler';
 import { useCallback } from 'react';
-import { ErrorMessage } from '../template/mainComponents';
+import { ErrorMessage,SuccesMessage } from '../template/mainComponents';
 import {urlStates} from './constants';
 
 const FormLogin = ()=>{
@@ -16,44 +16,56 @@ const FormLogin = ()=>{
     const [error,setError] = useState('');
     const [name,setName] = useState('');
     const [confirmPassword,setConfirmPassword] = useState('');
-    const [ stateLoc, setStateLoc] = useState('');
+    const [stateLoc, setStateLoc] = useState('');
     const [stateList,setStateList] = useState([]);
     const id = useId();
     const route  = useLocation();
     const dispatch = useDispatch();
+    const [succesResgistration,setSuccesResgistration] = useState('');
+    const navigation = useNavigate();
+   
+   
     
     const handleEmail = useCallback((e) =>{
     setEmailLogin(e.target.value);
+    setError('');
     },[]);
 
     const handleName = useCallback((e) =>{
         setName(e.target.value);
+        setError('');
         },[]);
 
     const handlePassword = useCallback((e)=>{
-        setPassword(e.target.value)
+        setPassword(e.target.value);
+        setError('');
     },[]);
 
     const handleConfirmPassword = useCallback((e)=>{
-        setConfirmPassword(e.target.value)
+        setConfirmPassword(e.target.value);
+        setError('');
     },[]);
 
     const handleRemmemberPassword = useCallback(()=>{
         setRememberPass(!remmemberPass);
+        setError('');
        
     },[remmemberPass]);
 
     const handleStateLoc= useCallback((e)=>{
-        setStateLoc(e.target.value)
+        setStateLoc(e.target.value);
+        setError('');
     },[]);
   
    
-    const handleSubmit = async (e) =>{ 
+    const handleSubmitLogin = async (e) =>{ 
        
         e.preventDefault();
         setDisable(true);
         dispatch(setEmail(emailLogin));
-       
+        let userString = localStorage.getItem('user');
+        let userSaved= JSON.parse(userString);
+        
       if(emailLogin === '' || emailLogin.length < 5){
           setError('Preencha o campo email');
           setDisable(false);
@@ -66,10 +78,65 @@ const FormLogin = ()=>{
           return;
       }
 
+       if(userSaved.email !==emailLogin){
+          setError('Email não encontrado');
+          setDisable(false);
+          return ;
+       }
+
+       if(userSaved.password !== password){
+           setError('senha inválida');
+           setDisable(false);
+           return;
+       }
+
         doLoggin(id,remmemberPass);
         window.location.href="/";
     
     };
+
+    const handleRegistration = (e)=>{
+        e.preventDefault();
+        setDisable(true);
+        if(name ==="" | name.length <5){
+             setError('Preencha o nome completo');
+             setDisable(false);
+             return;
+        } 
+
+
+      if(emailLogin === '' || emailLogin.length < 5){
+        setError('Preencha o campo email');
+        setDisable(false);
+        return
+         }
+
+    
+        if(password === '' || password.length < 5){
+            setError('Preencha a senha');
+            setDisable(false);
+            return;
+        }
+
+        if(password !== confirmPassword){
+            setError('Confirme sua senha,lembrando que precisa ser identica');
+            setDisable(false);
+            return;
+        }
+
+        if(stateLoc === ''){
+            setError('selecione seu estado');
+            return;
+        }
+
+        localStorage.setItem('user', JSON.stringify({email:emailLogin,password:password,name:name,state:stateLoc}));
+        setSuccesResgistration('Cadastro feito com sucesso');
+
+        setTimeout(()=>{
+          navigation('/signin');
+        },3000);
+        
+    }
 
     const LoadStateList = async () =>{
 
@@ -87,7 +154,7 @@ const FormLogin = ()=>{
         if(route.pathname === '/signup'){
             LoadStateList();
         }
-   
+          return clearTimeout();
     },[route.pathname])
 
     return(
@@ -95,7 +162,10 @@ const FormLogin = ()=>{
             {error && 
                 <ErrorMessage>{error}</ErrorMessage>
             }
-            <Form  onSubmit={handleSubmit}>
+            {!error && succesResgistration && 
+               <SuccesMessage>{succesResgistration}</SuccesMessage>
+            }
+            <Form  onSubmit={route.pathname === '/signin'? handleSubmitLogin :handleRegistration}>
                 {route.pathname === '/signup' &&
                     <label className='area'>
                         <div className='area-title'>Nome Completo</div>
@@ -171,7 +241,7 @@ const FormLogin = ()=>{
                             <select value={stateLoc} onChange={handleStateLoc}>
                                 <option></option>
                               {stateList.map((item)=>(
-                                    <option value={item.id} key={item.id}>
+                                    <option value={item.sigla} key={item.id}>
                                         {item.sigla}
                                     </option>
 
