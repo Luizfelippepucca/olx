@@ -58,7 +58,7 @@ const FormLogin = ()=>{
     },[]);
   
    
-    const handleSubmitLogin = async (e) =>{ 
+    const handleSubmitLogin = useCallback( async (e) =>{ 
        
         e.preventDefault();
         setDisable(true);
@@ -93,9 +93,9 @@ const FormLogin = ()=>{
         doLoggin(id,remmemberPass);
         window.location.href="/";
     
-    };
+    },[dispatch,emailLogin,id,password,remmemberPass]);
 
-    const handleRegistration = (e)=>{
+    const handleRegistration = useCallback((e)=>{
         e.preventDefault();
         setDisable(true);
         if(name ==="" | name.length <5){
@@ -136,7 +136,7 @@ const FormLogin = ()=>{
           navigation('/signin');
         },3000);
         
-    }
+    },[confirmPassword,emailLogin,name,navigation,password,stateLoc])
 
     const LoadStateList = async () =>{
 
